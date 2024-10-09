@@ -126,6 +126,9 @@ const TableList: React.FC = () => {
             Remove
           </Button>,
         ]}
+        options={{
+          reload: undefined,
+        }}
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys,
