@@ -157,6 +157,9 @@ export default defineConfig({
       projectName: 'swagger',
     },
   ],
+  mock: {
+    include: ['mock/**/*.ts'],
+  },
   mfsu: {
     strategy: 'normal',
   },
