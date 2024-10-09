@@ -1,10 +1,9 @@
+import formatDateTime from '@/common/formatDateTime';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { ProColumns } from '@ant-design/pro-table/lib';
 import { FormattedMessage, useIntl } from '@umijs/max';
 import { Button, message, Space, Typography } from 'antd';
-import React, {useEffect, useRef, useState} from 'react';
-import {ProColumns} from "@ant-design/pro-table/lib";
-import formatDateTime from "@/common/formatDateTime";
-
+import React, { useEffect, useState } from 'react';
 
 const TableList: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -25,42 +24,33 @@ const TableList: React.FC = () => {
       .catch((error) => {
         console.error('Error fetching the data:', error);
       });
-  })
+  }, []);
 
   const columns: ProColumns<API.Bet>[] = [
     {
       title: 'key',
       hideInTable: true,
-      renderText: (_, record) => `${record.game_id}${record.best_price_home_odd_books}${record.best_price_away_odd_books}`
+      renderText: (_, record) =>
+        `${record.game_id}${record.best_price_home_odd_books}${record.best_price_away_odd_books}`,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.arbTable.columnName.arb_percent"
-          defaultMessage="Arb %"
-        />
-      ),
+      title: <FormattedMessage id="pages.arbTable.columnName.arb_percent" defaultMessage="Arb %" />,
       dataIndex: 'arb_percent',
       sorter: (a, b) => a.arb_percent - b.arb_percent,
       hideInForm: true,
       renderText: (text: string) => `${text}%`,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.arbTable.columnName.market"
-          defaultMessage="Market"
-        />
-      ),
-      filters: [...new Set(dataSource.map(bet => bet.market))].map((item) => ({
+      title: <FormattedMessage id="pages.arbTable.columnName.market" defaultMessage="Market" />,
+      filters: [...new Set(dataSource.map((bet) => bet.market))].map((item) => ({
         text: item,
-        value: item
+        value: item,
       })),
       dataIndex: 'market',
       filterSearch: true,
       onFilter: (value, record) => {
         console.log('value', value);
-        return record.market.indexOf(value as string) === 0
+        return record.market.indexOf(value as string) === 0;
       },
       sorter: (a, b) => a.market.length - b.market.length,
       renderText: (text: string) => text,
@@ -78,36 +68,26 @@ const TableList: React.FC = () => {
       filterSearch: true,
       onFilter: (value, record) => {
         console.log('value', value);
-        return record.market.indexOf(value as string) === 0
+        return record.market.indexOf(value as string) === 0;
       },
       sorter: (a, b) => a.market.length - b.market.length,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.arbTable.columnName.bet_1"
-          defaultMessage="Bet 1"
-        />
-      ),
+      title: <FormattedMessage id="pages.arbTable.columnName.bet_1" defaultMessage="Bet 1" />,
       filterSearch: true,
       onFilter: (value, record) => {
         console.log('value', value);
-        return record.market.indexOf(value as string) === 0
+        return record.market.indexOf(value as string) === 0;
       },
       sorter: (a, b) => a.market.length - b.market.length,
       renderText: (text, record) => `${record.home_team} ${record.market}`,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.arbTable.columnName.bet_2"
-          defaultMessage="Bet 2"
-        />
-      ),
+      title: <FormattedMessage id="pages.arbTable.columnName.bet_2" defaultMessage="Bet 2" />,
       filterSearch: true,
       onFilter: (value, record) => {
         console.log('value', value);
-        return record.market.indexOf(value as string) === 0
+        return record.market.indexOf(value as string) === 0;
       },
       sorter: (a, b) => a.market.length - b.market.length,
       renderText: (text, record) => `${record.away_team} ${record.market}`,
@@ -122,7 +102,7 @@ const TableList: React.FC = () => {
       }
 
       const updatedData = dataSource.filter(
-        (item) => !selectedRowKeys.includes(item.game_id)
+        (item) => !selectedRowKeys.includes(`${item.game_id}-${item.best_price_home_name}`),
       );
       setDataSource(updatedData);
       setSelectedRowKeys([]);
